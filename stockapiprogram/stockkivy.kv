@@ -1,0 +1,26 @@
+WindowManager:
+    SubmitTicker:
+    GraphDisplays:
+
+<SubmitTicker>
+    name:"StockTickerEntry"
+    GridLayout:
+        cols:1
+        GridLayout:
+            cols:2
+            Label:
+                text: "Type Ticker Here:"
+            TextInput:
+                id: tickerkivyinput
+                multiline: False
+        Button:
+            text: "Submit"
+            on_press: on_press: app.clicked(tickerkivyinput.text)
+            on_release: app.root.current = "DisplayTerminal"
+
+<GraphDisplays>
+    name:"DisplayTerminal"
+    
+    Button:
+        text:"Go Back"
+        on_release: app.root.current = "StockTickerEntry"
