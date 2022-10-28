@@ -10,6 +10,8 @@ import matplotlib.pylab as plt
 api_key = '6327aab714c9a2.75763093'#
 ####################################
 
+DEBUG = True
+
 def getFreeCashFlow(ticker):
     url1 = f'http://eodhistoricaldata.com/api/fundamentals/AAPL.US?api_token={api_key}&&filter=Financials::Cash_Flow::yearly::2021-09-30::filing_date'
     dataX = urllib.request.urlopen(url1).read()
@@ -40,13 +42,15 @@ def getFreeCashFlow(ticker):
         dataX = urllib.request.urlopen(url1).read()
         dataX = json.loads(dataX)
         if dataX[f'Financials::Cash_Flow::yearly::{i}::freeCashFlow'] != 'NA':
-            print(f"Yes! Free Cash Flow Found for {i}!")
+            if DEBUG:
+                print(f"Yes! Free Cash Flow Found for {i}!")
             url_date = datetime.datetime.strptime(i, "%Y-%m-%d").date()
             for k in last_day_month_backwards:
                 if int(k) == url_date.month:
                     correct_day_month = url_date.replace(day=int(last_day_month[k]))
-                    print(f'{k} is correct!')
-                    print(correct_day_month)
+                    if DEBUG:
+                        print(f'{k} is correct!')
+                        print(correct_day_month)
                     for j in range (1,10):
                         d2 = correct_day_month - dateutil.relativedelta.relativedelta(year=correct_day_month.year-j)
                         url_cashflowjson = f'http://eodhistoricaldata.com/api/fundamentals/{tickersymbol}.US?api_token={api_key}&&filter=Financials::Cash_Flow::yearly::{d2}::freeCashFlow'
@@ -54,15 +58,18 @@ def getFreeCashFlow(ticker):
                         cashflowdic = json.loads(cashflowjson)
                         cashflowlist.append(cashflowdic)
                         cashflowdatelist.append(str(d2))
-                        print(d2)
-                        print(cashflowdic)
-                        print(type(cashflowdic))
-                        print(cashflowlist)
-                        print(cashflowdatelist)
+                        if DEBUG:
+                            print(d2)
+                            print(cashflowdic)
+                            print(type(cashflowdic))
+                            print(cashflowlist)
+                            print(cashflowdatelist)
                     break
-                print(f"{k} does not match {url_date.month}")
+                if DEBUG:
+                    print(f"{k} does not match {url_date.month}")
             break
-        print(f'No Free Cash Flow for {i}.')
+        if DEBUG:
+            print(f'No Free Cash Flow for {i}.')
     
     # 2 lists needed for graphing Free Cashflow graphs
     floatcashflowlist = [float(z) for z in cashflowlist]
@@ -106,13 +113,15 @@ def getDebtEquityRatio(ticker):
         dataX = urllib.request.urlopen(url1).read()
         dataX = json.loads(dataX)
         if dataX != 'NA':
-            print(f"Yes! Debt Found for {i}!")
+            if DEBUG:
+                print(f"Yes! Debt Found for {i}!")
             url_date = datetime.datetime.strptime(i, "%Y-%m-%d").date()
             for k in last_day_month_backwards:
                 if int(k) == url_date.month:
                     correct_day_month = url_date.replace(day=int(last_day_month[k]))
-                    print(f'{k} is correct!')
-                    print(correct_day_month)
+                    if DEBUG:
+                        print(f'{k} is correct!')
+                        print(correct_day_month)
                     for j in range (1,10):
                         # Logic for the Year Date
                         d2 = correct_day_month - dateutil.relativedelta.relativedelta(year=correct_day_month.year-j)
@@ -130,28 +139,35 @@ def getDebtEquityRatio(ticker):
                             debtlist.append(debtdic)
                         equitylist.append(equitydic)
                         debtdatelist.append(str(d2))
-                        print(d2)
-                        print(debtdic)
-                        print(type(debtdic))
-                        print(debtlist)
-                        print(equitylist)
-                        print(debtdatelist)
+                        if DEBUG:
+                            print(d2)
+                            print(debtdic)
+                            print(type(debtdic))
+                            print(debtlist)
+                            print(equitylist)
+                            print(debtdatelist)
                     break
-                print(f"{k} does not match {url_date.month}")
+                if DEBUG:
+                    print(f"{k} does not match {url_date.month}")
             break
-        print(f'No Debt for {i}.')
+        if DEBUG:
+            print(f'No Debt for {i}.')
     
-    print(f'equitylist : {len(equitylist)}')
-    print(f'debtlist : {len(debtlist)}')
-    print(f'datelist : {len(debtdatelist)}')
+    if DEBUG:
+        print(f'equitylist : {len(equitylist)}')
+        print(f'debtlist : {len(debtlist)}')
+        print(f'datelist : {len(debtdatelist)}')
+
     floatdebtlist = [float(k) for k in debtlist]
-    print(f'floatdebtlist : {len(floatdebtlist)}')
     floatequitylist = [float(l) for l in equitylist]
-    print(f'floatequitylist : {len(floatequitylist)}')
     ratiorangelist = [int(n) for n in floatdebtlist]
-    print(f'ratiorangelist : {len(ratiorangelist)}')
     debtequityratio = list(map(truediv, floatdebtlist, floatequitylist))
-    print(f'debequityratio : {len(debtequityratio)}')
+    
+    if DEBUG:
+        print(f'floatdebtlist : {len(floatdebtlist)}')
+        print(f'floatequitylist : {len(floatequitylist)}')
+        print(f'ratiorangelist : {len(ratiorangelist)}')
+        print(f'debequityratio : {len(debtequityratio)}')
     
     # Turns the debt date list into date objects
     graphdebtdatelist = [datetime.datetime.strptime(date,"%Y-%m-%d").date() for date in debtdatelist]
@@ -159,7 +175,7 @@ def getDebtEquityRatio(ticker):
     
     # Graphing the Debt/Equity Ratio Graph 
     plt.style.use("cyberpunk")
-    plt.plot(graphdebtdatelist,debtequityratio, marker = 'o',label='Free Cash Flow')
+    plt.plot(graphdebtdatelist,debtequityratio, marker = 'o',label='Debt/Equity Ratio')
     plt.title(f'10 Year Historic Debt/Equity Ratio of {ticker.upper()}')
     plt.hlines(y=0, xmin = graphdebtdatelist[0], xmax = graphdebtdatelist[8],linewidth=2, color='r')
     plt.xlabel('Year')
