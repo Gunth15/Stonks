@@ -20,7 +20,18 @@ WindowManager:
 
 <GraphDisplays>
     name:"DisplayTerminal"
-    
-    Button:
-        text:"Go Back"
-        on_release: app.root.current = "StockTickerEntry"
+
+    GridLayout:
+        cols:1
+    	GridLayout:
+            cols:1
+                Image:
+            	    source: 'freecashflowgraph.jpg'
+            	    size: self.texture_size
+	        Image:
+                    source: 'debtequityratiograph.jpg'
+                    size: self.texture_size
+        
+        Button:
+            text:"Go Back"
+            on_release: app.root.current = "StockTickerEntry"
