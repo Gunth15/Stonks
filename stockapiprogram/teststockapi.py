@@ -1,5 +1,5 @@
 
-from MicahStockAPI import getFreeCashFlow, getDebtEquityRatio, changeDebug
+from MicahStockAPI import getFreeCashFlow, getDebtEquityRatio
 
 # Only input True or False
 

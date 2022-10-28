@@ -10,7 +10,7 @@ import matplotlib.pylab as plt
 api_key = '6327aab714c9a2.75763093'#
 ####################################
 
-DEBUG = True
+DEBUG = False
 
 def getFreeCashFlow(ticker):
     url1 = f'http://eodhistoricaldata.com/api/fundamentals/AAPL.US?api_token={api_key}&&filter=Financials::Cash_Flow::yearly::2021-09-30::filing_date'
@@ -76,6 +76,7 @@ def getFreeCashFlow(ticker):
     graphfreecashflowdatelist = [datetime.datetime.strptime(date,"%Y-%m-%d").date() for date in cashflowdatelist]
 
     # Plot the graph and save it as an image
+    
     plt.style.use("cyberpunk")
     plt.plot(graphfreecashflowdatelist,floatcashflowlist, marker = 'o',label='Free Cash Flow')
     plt.title(f'10 Year Historic Free Cash Flow of {ticker.upper()}')
@@ -84,6 +85,7 @@ def getFreeCashFlow(ticker):
     plt.ylabel('Cashflow (in tens of millions)')
     mplcyberpunk.add_underglow()
     plt.savefig("freecashflowgraph.jpg")
+    plt.clf()
     return print('######## Free Cash Flow Graph Saved! ########')
 
 def getDebtEquityRatio(ticker):
@@ -182,5 +184,6 @@ def getDebtEquityRatio(ticker):
     plt.ylabel('Debt/Equity Ratio')
     mplcyberpunk.add_underglow()
     plt.savefig("debtequityratiograph.jpg")
+    plt.clf()
 
     return print('######## Debt Equity Ratio Graph Saved! ########')
