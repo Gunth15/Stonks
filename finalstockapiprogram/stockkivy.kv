@@ -1,5 +1,6 @@
 WindowManager:
     SubmitTicker:
+    LoadingScreen:
     GraphDisplays:
 
 <SubmitTicker>
@@ -10,13 +11,20 @@ WindowManager:
             cols:2
             Label:
                 text: "Type Ticker Here:"
+                font_size: 50
             TextInput:
                 id: tickerkivyinput
                 multiline: False
+                font_size: 128
         Button:
             text: "Submit"
-            on_press: on_press: app.clicked(tickerkivyinput.text)
-            on_release: app.root.current = "DisplayTerminal"
+            on_press: app.root.current = "loading"
+            on_press: app.clicked(tickerkivyinput.text)
+
+<LoadingScreen>
+    name:"loading"
+    Label:
+        text: "Loading..."
 
 <GraphDisplays>
     name:"DisplayTerminal"
